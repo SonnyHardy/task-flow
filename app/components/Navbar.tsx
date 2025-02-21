@@ -1,11 +1,13 @@
 "use client"
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, useUser } from '@clerk/nextjs'
 import { FolderGit2, Menu, X } from 'lucide-react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { checkAndAddUser } from '../actions';
 
 const Navbar = () => {
+    const {user} = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const pathname = usePathname();
 
@@ -13,6 +15,15 @@ const Navbar = () => {
         {href: "/general-projects", label: "Collaborations"},
         {href: "/", label: "My projects"}
     ];
+
+    useEffect(() => {
+        const email = user?.primaryEmailAddress?.emailAddress;
+        const username = user?.fullName ? user?.fullName : email?.split('@')[0];
+
+        if(email && username) {
+            checkAndAddUser(email, username);
+        }
+    }, [user])
 
     const isActiveLink = (href: string) => pathname.replace(/\/$/, "") === href.replace(/\/$/, "");
 

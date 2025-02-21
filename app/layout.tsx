@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" data-theme="light">
         <body
         >
           {children}

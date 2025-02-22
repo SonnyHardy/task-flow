@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Wrapper from "./components/Wrapper";
 import { FolderGit2 } from "lucide-react";
-import { createProject, getProjectsCreatedByUser } from "./actions";
+import { createProject, deleteProjectById, getProjectsCreatedByUser } from "./actions";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 import { Project } from "@/type";
@@ -34,6 +34,17 @@ export default function Home() {
     }
   }, [email])
 
+  const deleteProject = async (projectId: string) => {
+    try {
+      await deleteProjectById(projectId);
+      fetchProjects(email);
+      toast.success('Project deleted successfully');
+    }catch(error) {
+      toast.error('Error when deleting the project');
+      throw new Error('Error when deleting project: '+ error);
+    }
+  }
+
   const handleSubmit = async () => {
     try {
       const modal = document.getElementById('my_modal_3') as HTMLDialogElement;
@@ -44,6 +55,7 @@ export default function Home() {
 
       setName("");
       setDescription("");
+      fetchProjects(email);
       toast.success("Project created successfully 👍");
 
     }catch (error) {
@@ -94,12 +106,12 @@ export default function Home() {
         </dialog>
 
         <div className="w-full">
-          
+
           {projects.length > 0 ? (
             <ul className="w-full grid md:grid-cols-3 gap-6">
               {projects.map((project) => (
                 <li key={project.id}>
-                  <ProjectComponent project={project} admin={1}></ProjectComponent>
+                  <ProjectComponent project={project} admin={1} style={true} onDelete={deleteProject}></ProjectComponent>
                 </li>
               ))}
             </ul>

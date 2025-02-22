@@ -29,7 +29,7 @@ export async function checkAndAddUser(email: string, name: string) {
 }
 
 function generateUniqueCode(): string {
-    return randomBytes(8).toString('hex');
+    return randomBytes(6).toString('hex');
 }
 
 export async function createProject(name: string, description: string, email: string) {
@@ -96,6 +96,21 @@ export async function getProjectsCreatedByUser(email: string) {
 
 
     }catch (error){
+        console.error(error);
+        throw new Error;
+    }
+}
+
+export async function deleteProjectById(projectId: string) {
+    try{
+        await prisma.project.delete({
+            where: {
+                id: projectId
+            }
+        });
+        console.log('Project deleted successfully:', projectId);
+
+    }catch(error) {
         console.error(error);
         throw new Error;
     }

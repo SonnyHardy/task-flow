@@ -29,7 +29,7 @@ export async function checkAndAddUser(email: string, name: string) {
 }
 
 function generateUniqueCode(): string {
-    return randomBytes(10).toString('hex');
+    return randomBytes(8).toString('hex');
 }
 
 export async function createProject(name: string, description: string, email: string) {

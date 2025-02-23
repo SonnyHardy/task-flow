@@ -13,6 +13,7 @@ export type Project = PrismaProject & {
         inProgressPercentage: number;
         toDoPercentage: number;
     };
+    createdBy?: User | null;
     tasks?: Task[];
     users?: User[];
 };

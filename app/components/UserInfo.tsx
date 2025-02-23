@@ -1,0 +1,31 @@
+import Image from 'next/image';
+import React, { FC } from 'react'
+
+interface UserInfoProps {
+    role: string;
+    email: string | null;
+    name: string | null;
+    profileImage: string | null;
+}
+
+const UserInfo: FC<UserInfoProps> = ({role, email, name, profileImage}) => {
+    return (
+        <div className='flex items-center'>
+
+            <div className='avatar'>
+                <div className='ring-primary ring-offset-base-100 w-9 rounded-full ring ring-offset-2'>
+                    <Image src={profileImage || '/profile.avif'} alt='profile image' height={500} width={500}/>
+                </div>
+            </div>
+
+            <div className='flex flex-col ml-4'>
+                <span className='text-xs text-gray-400'>{role}</span>
+                <span className='text-sm'>{email || ""}</span>
+                <span className='text-sm italic font-bold'>{name || ""}</span>
+            </div>
+
+        </div>
+    )
+}
+
+export default UserInfo

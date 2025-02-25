@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { randomBytes } from "crypto";
 
-export async function checkAndAddUser(email: string, name: string) {
+export async function checkAndAddUser(email: string, name: string, profileImage: string) {
     if (!email) return;
     try {
         const existingUser = await prisma.user.findUnique({
@@ -15,7 +15,8 @@ export async function checkAndAddUser(email: string, name: string) {
             await prisma.user.create({
                 data: {
                     email,
-                    name
+                    name,
+                    profileImage
                 }
             })
             console.log("User added to database");
@@ -233,6 +234,70 @@ export async function getProjectInfo(projectId: string, details: boolean) {
 
         return project;
 
+    } catch (error) {
+        console.error(error);
+        throw new Error;
+    }
+}
+
+export async function getProjectUsers(projectId: string) {
+    try {
+        const projectWithUsers = await prisma.project.findUnique({
+            where: {
+                id: projectId
+            },
+            include: {
+                users: {
+                    include: {user: true}
+                }
+            }
+        });
+
+        return projectWithUsers?.users.map((projectUser => projectUser.user)) || [];
+        
+    } catch (error) {
+        console.error(error);
+        throw new Error;
+    }
+}
+
+export async function createTask(
+    name: string,
+    description: string,
+    dueDate: Date | null,
+    projectId: string,
+    createdByEmail: string,
+    assignToEmail: string | undefined
+) {
+    try {
+        const createdBy = await prisma.user.findUnique({
+            where: {email: createdByEmail}
+        });
+        if(!createdBy) throw new Error(`User with email ${createdByEmail} not found`);
+
+        let assignedUserId = createdBy.id;
+
+        if(assignToEmail){
+            const assignedUser = await prisma.user.findUnique({
+                where: {email: assignToEmail}
+            });
+            if(!assignedUser) throw new Error(`User with email ${assignToEmail} not found`);
+            assignedUserId = assignedUser.id;
+        }
+
+        const newTask = await prisma.task.create({
+            data: {
+                name,
+                description,
+                dueDate,
+                projectId,
+                createdById: createdBy.id,
+                userId: assignedUserId
+            }
+        });
+
+        console.log('Task created successfully:', newTask);
+        
     } catch (error) {
         console.error(error);
         throw new Error;

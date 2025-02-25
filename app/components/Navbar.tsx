@@ -19,9 +19,10 @@ const Navbar = () => {
     useEffect(() => {
         const email = user?.primaryEmailAddress?.emailAddress;
         const username = user?.fullName ? user?.fullName : email?.split('@')[0];
+        const profileImage = user?.imageUrl as string;
 
         if(email && username) {
-            checkAndAddUser(email, username);
+            checkAndAddUser(email, username, profileImage);
         }
     }, [user])
 

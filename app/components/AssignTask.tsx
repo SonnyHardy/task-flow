@@ -1,14 +1,14 @@
 import { User } from '@prisma/client'
-import React, { FC, use, useState } from 'react'
+import React, { FC, useState } from 'react'
 import UserInfo from './UserInfo';
 
 interface AssignTaskProps {
     users: User[];
-    projectId: string;
+    //projectId: string;
     onAssignTask: (user: User) => void;
 }
 
-const AssignTask: FC<AssignTaskProps> = ({users, projectId, onAssignTask}) => {
+const AssignTask: FC<AssignTaskProps> = ({users, onAssignTask}) => {
 
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 

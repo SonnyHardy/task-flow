@@ -59,7 +59,7 @@ export async function createProject(name: string, description: string, email: st
 
     }catch(error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -98,7 +98,7 @@ export async function getProjectsCreatedByUser(email: string) {
 
     }catch (error){
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -113,7 +113,7 @@ export async function deleteProjectById(projectId: string) {
 
     }catch(error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -159,7 +159,7 @@ export async function addUserToProject(email: string, inviteCode: string) {
 
     }catch(error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -198,7 +198,7 @@ export async function getProjectsAssociatedWithUser(email: string) {
 
     }catch(error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -236,7 +236,7 @@ export async function getProjectInfo(projectId: string, details: boolean) {
 
     } catch (error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -257,7 +257,7 @@ export async function getProjectUsers(projectId: string) {
         
     } catch (error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -300,7 +300,7 @@ export async function createTask(
         
     } catch (error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
     }
 }
 
@@ -313,6 +313,55 @@ export async function deleteTaskById(taskId: string) {
         });
     } catch (error) {
         console.error(error);
-        throw new Error;
+        throw new Error();
+    }
+}
+
+export async function getTaskDetails(taskId: string) {
+    try {
+        const task = await prisma.task.findUnique({
+            where: {id: taskId},
+            include: {
+                project: true,
+                user: true,
+                createdBy: true
+            }
+        })
+        if(task === undefined || task === null) throw new Error('Task not found: ' + task);
+
+        return task;
+
+    } catch (error) {
+        console.error(error);
+        throw new Error(`${error}`);
+    }
+}
+
+export async function updateTaskStatus(taskId: string, newStatus: string, solutionDescription?: string) {
+    try {
+        const existingTask = await prisma.task.findUnique({
+            where: {id: taskId}
+        });
+        if(!existingTask) throw new Error('Task not found');
+
+        if(newStatus === 'Done' && solutionDescription) {
+            await prisma.task.update({
+                where: {id: taskId},
+                data: {
+                    status: newStatus,
+                    solutionDescription
+                }
+            })
+
+        } else {
+            await prisma.task.update({
+                where: {id: taskId},
+                data: {status: newStatus}
+            })
+        }
+
+    } catch (error) {
+        console.error(error);
+        throw new Error();
     }
 }

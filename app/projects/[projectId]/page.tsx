@@ -66,6 +66,7 @@ const Page = ({params}: {params: Promise<{projectId: string}>}) => {
             toast.success('Task deleted successfully');
         } catch (error) {
             toast.error('Error when deleting task');
+            console.error(error);
             throw new Error;
         }
     }
@@ -81,7 +82,7 @@ const Page = ({params}: {params: Promise<{projectId: string}>}) => {
                                 role='Created by'
                                 email={project?.createdBy?.email || null}
                                 name={project?.createdBy?.name || null}
-                                profileImage={user?.imageUrl || null}
+                                profileImage={project?.createdBy?.profileImage || null}
                             />
                         </div>
 

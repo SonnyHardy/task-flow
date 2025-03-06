@@ -38,6 +38,7 @@ const Page = () => {
             setIsLoading("");
             if(inviteCode !== "") {
                 await addUserToProject(email, inviteCode);
+                fetchProjects(email);
                 toast.success('You can now collaborate on this project');
                 setInviteCode('');
             }else {

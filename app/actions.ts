@@ -82,7 +82,8 @@ export async function getProjectsCreatedByUser(email: string) {
                             select: {
                                 id: true,
                                 name: true,
-                                email: true
+                                email: true,
+                                profileImage: true
                             }
                         }
                     }
@@ -220,7 +221,8 @@ export async function getProjectInfo(projectId: string, details: boolean) {
                             select: {
                                 id: true,
                                 name: true,
-                                email: true
+                                email: true,
+                                profileImage: true
                             }
                         }
                     }

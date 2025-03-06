@@ -94,7 +94,7 @@ const Page = ({params}: {params: Promise<{projectId: string}>}) => {
 
                 <div className='flex flex-col md:flex-row md:justify-between'>
                     <div className='md:w-1/4'>
-                        <AssignTask users={usersProject} projectId={projectId} onAssignTask={handleUserSelected} />
+                        <AssignTask users={usersProject} onAssignTask={handleUserSelected} />
 
                         <div className='flex justify-between items-center mt-4'>
                             <span className='badge badge-info badge-sm'>Due date</span>

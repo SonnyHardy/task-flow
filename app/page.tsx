@@ -23,7 +23,6 @@ export default function Home() {
       const myProjects = await getProjectsCreatedByUser(email);
       setProjects(myProjects);
       console.log(myProjects);
-
     }catch (error) {
       console.error("Error when fetching projects:", error);
     }

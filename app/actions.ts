@@ -181,7 +181,8 @@ export async function getProjectsAssociatedWithUser(email: string) {
                             select: {
                                 id: true,
                                 name: true,
-                                email: true
+                                email: true,
+                                profileImage: true
                             }
                         }
                     }
